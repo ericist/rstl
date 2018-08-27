@@ -3,6 +3,8 @@ A Python port of R's stl function. Translated rather literally from the original
 
 For more information see [the R manual](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/stl.html).
 
+Compatible with Python 2 and 3.
+
 ## Installation
 ```
 pip install --user rstl
@@ -24,6 +26,8 @@ trend = stl.trend
 ```
 
 ## Documentation
+The code itself is mostly uncommented due to it being a literal translation.
+
 ```python
 class STL(ts, freq, s_window, s_degree=0, t_window=None,
           t_degree=1, l_window=None, l_degree=None, s_jump=None,
