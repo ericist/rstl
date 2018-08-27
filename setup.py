@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="rstl",
-    version="0.1.1",
+    version="0.1.3",
     author="Eric Rauch",
     author_email="ericist@pm.me",
     description="A Python port of R's stl function",

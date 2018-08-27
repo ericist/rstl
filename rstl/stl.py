@@ -1,5 +1,13 @@
+from __future__ import division     # float division
 import math
 import numpy
+
+
+# For Python 3 compatibility
+try:
+    xrange
+except NameError:
+    xrange = range
 
 
 class STL:
@@ -47,19 +55,19 @@ class STL:
         if s_window == 'periodic':
             s_window = 10*n + 1
         if s_jump is None:
-            s_jump = math.ceil(s_window/10)
+            s_jump = int(math.ceil(s_window/10))    # int() because Python 2's math.ceil returns a float
 
         if t_window is None:
-            t_window = nextodd(math.ceil(1.5*freq / (1 - 1.5/s_window)))
+            t_window = nextodd(int(math.ceil(1.5*freq / (1 - 1.5/s_window))))
         if t_jump is None:
-            t_jump = math.ceil(t_window/10)
+            t_jump = int(math.ceil(t_window/10))
 
         if l_window is None:
             l_window = nextodd(freq)
         if l_degree is None:
             l_degree = t_degree
         if l_jump is None:
-            l_jump = math.ceil(l_window/10)
+            l_jump = int(math.ceil(l_window/10))
 
         if inner is None:
             inner = 1 if robust else 2
@@ -85,7 +93,7 @@ class STL:
         stlstp(ts, n, freq, s_window, t_window, l_window, s_degree, t_degree, l_degree, s_jump, t_jump, l_jump, inner, userw, weights, seasonal, trend, work)
 
         userw = True
-        for _ in range(outer):
+        for _ in xrange(outer):
             work[:n, 0] = trend + seasonal
             stlrwt(ts, n, work[:n, 0], weights)
             stlstp(ts, n, freq, s_window, t_window, l_window, s_degree, t_degree, l_degree, s_jump, t_jump, l_jump, inner, userw, weights, seasonal, trend, work)
@@ -112,7 +120,7 @@ class STL:
 
 
 def nextodd(x):
-    x = round(x)
+    x = int(round(x))   # int() because Python 2's round returns a float
     if x % 2 == 0:
         x += 1
     return x
@@ -127,7 +135,7 @@ def stless(y, n, length, ideg, njump, userw, rw, ys, res):
     if length >= n:
         nleft = 1
         nright = n
-        for i in range(0, n, newnj):
+        for i in xrange(0, n, newnj):
             nys = stlest(y, n, length, ideg, i+1, ys[i], nleft, nright, res, userw, rw)
             if nys is not None:
                 ys[i] = nys
@@ -138,7 +146,7 @@ def stless(y, n, length, ideg, njump, userw, rw, ys, res):
             nsh = int((length+1)/2)
             nleft = 1
             nright = length
-            for i in range(n):
+            for i in xrange(n):
                 if (i+1) > nsh and nright != n:
                     nleft += 1
                     nright += 1
@@ -149,7 +157,7 @@ def stless(y, n, length, ideg, njump, userw, rw, ys, res):
                     ys[i] = y[i]
         else:
             nsh = int((length+1)/2)
-            for i in range(1, n+1, newnj):
+            for i in xrange(1, n+1, newnj):
                 if i < nsh:
                     nleft = 1
                     nright = length
@@ -166,7 +174,7 @@ def stless(y, n, length, ideg, njump, userw, rw, ys, res):
                     ys[i-1] = y[i-1]
 
     if newnj != 1:
-        for i in range(0, n-newnj, newnj):
+        for i in xrange(0, n-newnj, newnj):
             delta = (ys[i+newnj] - ys[i]) / newnj
             ys[(i+1):(i+newnj)] = ys[i] + delta*numpy.arange(1, newnj)
         k = int(((n-1) // newnj)*newnj+1)
@@ -242,7 +250,7 @@ def stlma(x, n, length, ave):
     if newn > 1:
         k = length
         m = 0
-        for j in range(1, newn):
+        for j in xrange(1, newn):
             k += 1
             m += 1
             v = v - x[m-1] + x[k-1]
@@ -250,7 +258,7 @@ def stlma(x, n, length, ave):
 
 
 def stlstp(y, n, np, ns, nt, nl, isdeg, itdeg, ildeg, nsjump, ntjump, nljump, ni, userw, rw, season, trend, work):
-    for _ in range(ni):
+    for _ in xrange(ni):
         work[:n, 0] = y - trend
         stlss(work[:, 0], n, np, ns, isdeg, nsjump, userw, rw, work[:, 1], work[:, 2], work[:, 3], work[:, 4], season)
         stlfts(work[:, 1], n+2*np, np, work[:, 2], work[:, 0])
@@ -274,7 +282,7 @@ def stlrwt(y, n, fit, rw):
 
 
 def stlss(y, n, np, ns, isdeg, nsjump, userw, rw, season, work1, work2, work3, work4):
-    for j in range(np):
+    for j in xrange(np):
         k = (n-j-1) // np + 1
         work1[:k] = y[numpy.arange(k)*np+j]
 
@@ -298,5 +306,5 @@ def stlss(y, n, np, ns, isdeg, nsjump, userw, rw, season, work1, work2, work3, w
         else:
             work2[k+1] = work2[k]
 
-        for m in range(k+2):
+        for m in xrange(k+2):
             season[m*np+j] = work2[m]
