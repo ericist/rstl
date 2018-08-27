@@ -90,13 +90,17 @@ class STL:
             l_window += 1
 
         userw = False
-        stlstp(ts, n, freq, s_window, t_window, l_window, s_degree, t_degree, l_degree, s_jump, t_jump, l_jump, inner, userw, weights, seasonal, trend, work)
+        stlstp(ts, n, freq, s_window, t_window, l_window,
+               s_degree, t_degree, l_degree, s_jump, t_jump, l_jump,
+               inner, userw, weights, seasonal, trend, work)
 
         userw = True
         for _ in xrange(outer):
             work[:n, 0] = trend + seasonal
             stlrwt(ts, n, work[:n, 0], weights)
-            stlstp(ts, n, freq, s_window, t_window, l_window, s_degree, t_degree, l_degree, s_jump, t_jump, l_jump, inner, userw, weights, seasonal, trend, work)
+            stlstp(ts, n, freq, s_window, t_window, l_window,
+                   s_degree, t_degree, l_degree, s_jump, t_jump, l_jump,
+                   inner, userw, weights, seasonal, trend, work)
 
         if outer <= 0:
             weights.fill(1)
