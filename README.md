@@ -54,7 +54,7 @@ Attributes:
 * s_window, s_degree, t_window, t_degree, l_window, l_degree, s_jump, t_jump, l_jump, inner and outer. Note that these may have been altered by the program.
 
 ## Performance
-According to tests a runtime increase of factor ~3 should be expected.
+According to tests a runtime increase of factor ~3-5 should be expected.
 
 ## Copyright and License
 Python port Copyright 2018 Eric Rauch.
